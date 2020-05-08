@@ -1,0 +1,14 @@
+/www/*
+!/www/libs
+!/www/*.ico
+!/www/*.png
+
+
+.idea/
+.vscode/
+node_modules/
+
+package-lock.json
+.*.swp
+.env
+.directory
