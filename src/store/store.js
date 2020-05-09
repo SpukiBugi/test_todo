@@ -1,13 +1,15 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from "vue";
+import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
-import Visual from './visual/index';
+import Main from "./main/index.js";
+import Redactor from "./redactor/index.js";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    visual: Visual,
+    main: Main,
+    redactor: Redactor,
   },
 
   plugins: [createPersistedState()],

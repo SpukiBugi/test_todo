@@ -1,5 +1,5 @@
 import Index from "@/vue/pages/index.vue";
-import CardPage from "@/vue/pages/card-page.vue";
+import NotePage from "@/vue/pages/note-page.vue";
 
 const routes = [
   {
@@ -9,9 +9,9 @@ const routes = [
   },
 
   {
-    name: "card",
-    path: "/card",
-    component: CardPage,
+    name: "note",
+    path: "/note/:id",
+    component: NotePage,
   }
 ];
 

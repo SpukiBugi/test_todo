@@ -14,6 +14,8 @@ import "@/assets/scss/style.scss";
 import store from "@/store/store.js"
 import routes from "./routes.js"
 
+Vue.use(VueRouter);
+
 const router = new VueRouter({
   mode: 'history',
   routes,
