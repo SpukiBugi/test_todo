@@ -4,9 +4,11 @@
 
 <template>
   <div v-cloak class="doc-wrap">
-    <header class="main-header">
-      ToDoMaker
-    </header>
+    <router-link to="/">
+      <header class="main-header">
+        ToDoMaker
+      </header>
+    </router-link>
     <router-view />
   </div>
 </template>

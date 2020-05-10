@@ -2,20 +2,21 @@
 * Компонент заметки для главной страницы
 */
 <template>
-  <article class="note-container">
-    <h2 class="note-name">{{note_data.name}}</h2>
-    
-    <div class="tasks">
-      <div 
-        v-for="task in note_data.tasks" 
-        :key="task.text" 
-        :value="task.text"
-        class="task-container"
-        :class="{'finished': task.finished}"
-      >
-        {{task.text}}
+  <div class="note-container">
+    <router-link :to="`/note/${note_data.id}`" class="link-wrap">
+      <h2 class="note-name">{{note_data.name}}</h2>
+      
+      <div class="tasks">
+        <div 
+          v-for="task in note_data.tasks" 
+          :key="task.text" 
+          class="task-container"
+          :class="{'finished': task.finished}"
+        >
+          {{task.text}}
+        </div>
       </div>
-    </div>
+    </router-link>
 
     <button 
       class="closer"
@@ -28,7 +29,7 @@
         <p class="confirm-text">Вы уверены что хотите удалить заметку?</p>
       </Confirm>
     </transition>
-  </article>
+  </div>
 </template>
 
 <script>
@@ -63,8 +64,8 @@ export default {
   },
 
   methods: {
-    ...mapMutations('todomaker', [
-      'deleteNote',
+    ...mapMutations("main", [
+      "deleteNote",
     ]),
 
     /** Обработка подтверждения удаления */
@@ -83,19 +84,34 @@ export default {
 
 .note-container {
   position: relative;
-  width: 350px;
+  width: 100%;
+  max-width: 350px;
   height: 350px;
   padding: 10px;
   margin: 0 20px 20px 0;
   border: $BRDR_PRIMARY;
   border-radius: $RAD_PRIMARY;
   background-color: $CLR_GRAY_BACK;
+  transition: all .3s ease;
+
+  &:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,.15);
+  }
+}
+
+.link-wrap {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
 }
 
 .note-name {
   padding-bottom: 10px;
+  margin-right: 20px;
   font-size: 22px;
   font-weight: normal;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .tasks {
@@ -120,6 +136,14 @@ export default {
   border: $BRDR_PRIMARY;
   border-radius: $RAD_PRIMARY;
   background-color: white;
+  word-wrap: anywhere;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   &:not(:last-child) {
     margin-bottom: 10px;

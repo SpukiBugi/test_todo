@@ -52,7 +52,9 @@ export default {
   justify-content: center;
   width: 350px;
   height: 220px;
+  padding: 20px;
   background-color: white;
+  text-align: center;
 }
 
 .confirm-buttons {

@@ -16,6 +16,24 @@ import routes from "./routes.js"
 
 Vue.use(VueRouter);
 
+
+/** Дебаунс */
+Vue.prototype.$debounce = (func, wait, immediate) => {
+  let timeout;
+  return function() {
+    const context = this;
+    const args = arguments;
+    let later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    const callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+};
+
 const router = new VueRouter({
   mode: 'history',
   routes,

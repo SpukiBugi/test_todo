@@ -1,8 +1,15 @@
 export default {
   /** Название заметки */
-  name: "",
+  note_data: {
+    name: "",
+  
+    tasks: [],
+  },
 
-  tasks: [],
-
-  action_log: [],
+  /** Начальное состояние */
+  start_data: {
+    name: "",
+  
+    tasks: [],
+  }
 };

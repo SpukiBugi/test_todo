@@ -7,10 +7,12 @@ export default {
       
       tasks: [
         {
+          id: 1,
           text: "TestTodo",
           finished: false,
         },
         {
+          id: 2,
           text: "TestTodo2",
           finished: true,
         }
@@ -23,10 +25,12 @@ export default {
       
       tasks: [
         {
+          id: 1,
           text: "TestTodo",
           finished: false,
         },
         {
+          id: 2,
           text: "TestTodo2",
           finished: true,
         }

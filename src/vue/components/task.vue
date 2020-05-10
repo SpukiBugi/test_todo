@@ -1,17 +1,18 @@
 /**
-* Задача
+* Шаблон задач
 */
 <template>
   <div class="task-container">
     <input
-      id="check"
+      :id="`check-${new_data.id}`"
       class="task-check"
       type="checkbox"
       name="check"
+      v-model="new_data.finished"
     >
     <label
       class="task-check-label"
-      for="check"
+      :for="`check-${new_data.id}`"
     >
       <div class="square">
         <svg width="8" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,14 +21,20 @@
       </div>
     </label>
 
-    <textarea v-model="text" class="task-text">
+    <textarea v-model="new_data.text" class="task-text">
     </textarea>
 
-    <button class="closer" v-html="$options.Svg.cross"></button>
+    <button 
+      class="closer"
+      v-html="$options.Svg.cross"
+      @click="deleteTask(new_data.id)"
+    ></button>
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+
 import Svg from '@/js/svg.js';
 
 export default {
@@ -36,18 +43,41 @@ export default {
   Svg,
 
   props: {
-    /** Значение текстового поля */
-    value: {
-      type: String,
-      default: "",
+    task_data: {
+      type: Object,
+      default: () => {},
     },
   },
 
   data() {
     return {
-      text: this.value,
+      /** Дебаунс перед обновлением задачи в сторе */
+      task_debounce: this.$debounce(this.changeTask, 1000),
+
+      new_data: {
+        id: this.task_data.id,
+        text: this.task_data.text,
+        finished: this.task_data.finished,
+      }
     }
-  }
+  },
+
+  watch: {
+    new_data: {
+      handler(value) {
+        this.task_debounce(value);
+      },
+
+      deep: true,
+    }, 
+  },
+
+  methods: {
+    ...mapMutations("redactor", [
+      "changeTask",
+      "deleteTask"
+    ]),
+  },
 }
 </script>
 
@@ -71,13 +101,17 @@ export default {
 }
 
 .task-check {
-  margin-right: 10px;
-}
-
-.task-check {
   position: absolute;
   z-index: -1;
   opacity: 0;
+
+  &:checked {
+    & ~.task-check-label {
+      .mark {
+        display: inline;
+      }
+    }
+  }
 }
 
 .task-check-label {

@@ -13,6 +13,7 @@
         ></router-link>
       </div>
     </div>
+    
     <div class="page-content">
       <div class="notes-container">
         <Note
@@ -43,7 +44,7 @@ export default {
 
   computed: {
     ...mapState({
-      notes: (state) => state.todomaker.notes,
+      notes: (state) => state.main.notes,
     }),
   },
 
@@ -58,6 +59,7 @@ export default {
   position: relative;
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
   padding-left: 20px;
 }
 
