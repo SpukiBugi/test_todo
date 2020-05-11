@@ -6,8 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --env.development",
     "dist": "npx webpack --config=webpack.config.js --env.production",
-    "dev": "npx webpack --config=webpack.config.js --env.development --progress",
-    "deploy": "push-dir --dir=www --branch=gh-pages --cleanup"
+    "dev": "npx webpack --config=webpack.config.js --env.development --progress"
   },
   "author": "valery",
   "license": "ISC",
@@ -29,7 +28,6 @@
     "mini-css-extract-plugin": "^0.7.0",
     "node-sass": "^4.12.0",
     "postcss-loader": "^3.0.0",
-    "push-dir": "^0.4.1",
     "sass-loader": "^7.1.0",
     "sass-resources-loader": "^2.0.1",
     "style-loader": "^0.23.1",
