@@ -1,9 +1,7 @@
 @import "./_colors.scss";
 @import "./_variables.scss";
-@import "./fonts.scss";
 @import "./normalize.scss";
 @import "./buttons.scss";
-@import "./mixins.scss";
 
 html {
   // font-family: $FNT_PRIMARY;
@@ -77,6 +75,11 @@ html {
       transition: opacity .3s ease .5s;
     }
   }
+}
+
+.button-svg {
+  width: 100%;
+  height: 100%;
 }
 
 .tooltip {

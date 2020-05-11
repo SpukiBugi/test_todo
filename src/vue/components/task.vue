@@ -23,7 +23,7 @@
       </div>
     </label>
 
-    <textarea :value="new_data.text" @change="taskChange($event.target.value, 'text')" class="task-text">
+    <textarea :value="new_data.text" @change="taskChange($event.target.value, 'text')" class="task-text" required>
     </textarea>
 
     <button 

@@ -13,7 +13,7 @@
           <Tooltip :tool_gap="10">
             Создать
           </Tooltip>
-          <div v-html="$options.Svg.add">
+          <div v-html="$options.Svg.add" class="button-svg">
           </div>
         </router-link>
       </div>

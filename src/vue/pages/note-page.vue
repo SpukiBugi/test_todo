@@ -15,16 +15,16 @@
           <Tooltip :tool_gap="10">
             {{button.name}}
           </Tooltip>
-          <div v-html="$options.Svg[button.svg_name]">
+          <div v-html="$options.Svg[button.svg_name]" class="button-svg">
           </div>
         </button>
       </div>
     </div>
     
-    <div class="page-content">
+    <form class="page-content" ref="form" novalidate action="javascript:void(0);">
       <div class="redactor">
         <p class="name-label">Название заметки</p>
-        <input type="text" :value="note.name" @change="inputName" class="note-name">
+        <input type="text" :value="note.name" @change="inputName" class="note-name" required>
 
         <p class="name-label">Пункты заметки</p>
 
@@ -40,10 +40,10 @@
           </button>
         </transition-group>
       </div>
-    </div>
+    </form>
 
     <transition name="fade-confirm">
-      <Confirm v-show="open_confirm" @confirm="confirm_callback">
+      <Confirm v-if="open_confirm" @confirm="confirm_callback" :buttons="confirm_buttons">
         <p class="confirm-text">{{confirm_text}}</p>
       </Confirm>
     </transition>
@@ -107,14 +107,15 @@ export default {
     return {
       /** Флаг загрузки данных из стора */
       loaded: false,
-      /** Ключ редактируемой заметки в массиве всех заметок */
-      note_key: Number,
+
       /** Флаг подтверждения */
       open_confirm: false,
       /** Текст подтверждения */
       confirm_text: "",
       /** Функция обработки ответа предупреждения */
       confirm_callback: "",
+      /** Флаг включения кнопок в предупреждении */
+      confirm_buttons: true,
 
       /** Счетчик обновления стора для перерисовки элементов */
       store_update: 0,
@@ -207,6 +208,21 @@ export default {
 
     /** Сохранение изменений */
     saveNote() {
+      this.confirm_buttons = false;
+      this.open_confirm = true;
+      this.confirm_callback = () => {this.open_confirm = false;};
+
+      if (!this.$refs.form.checkValidity()) {
+        this.confirm_text = "Заполните пустые поля";
+
+        setTimeout(() => {
+          this.open_confirm = false;
+          this.confirm_buttons = true;
+        }, 3000);
+
+        return;
+      }
+
       let state_clone = JSON.parse(JSON.stringify(this.note));
 
       if (this.$route.params.id === "new") {
@@ -215,9 +231,17 @@ export default {
         this.changeNote(state_clone);
       }
 
+      this.confirm_text = "Изменения сохранены";
+
       setTimeout(() => {
-        this.$router.push("/");
-      }, 10);
+        this.open_confirm = false;
+        this.confirm_buttons = true;
+
+        setTimeout(() => {
+          this.$router.push("/");
+        }, 300);
+      }, 1000);
+
     },
 
     /** Добавление задачи */
@@ -248,13 +272,10 @@ export default {
     confirmDelete(answer) {
       if (answer && this.note.id) {
         this.deleteNote(this.note.id);
+        this.$router.push('/');
       }
 
-      setTimeout(() => {
-        this.open_confirm = false;
-        this.$router.push('/');
-      }, 10);
-
+      this.open_confirm = false;
     },
 
     /** Обработка подтверждения отмены */

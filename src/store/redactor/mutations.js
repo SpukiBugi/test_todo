@@ -6,7 +6,6 @@ export default {
   },
 
   updateName: (state, name) => {
-    console.log("update_name", name);
     state.note_data.name = name;
   },
 
@@ -21,7 +20,6 @@ export default {
   },
 
   changeTask: (state, changed_task) => {
-    console.log("changeT", changed_task);
     let index;
 
     state.note_data.tasks.find((task, key) => {

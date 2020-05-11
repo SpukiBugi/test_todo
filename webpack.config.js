@@ -2,8 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const WriteFilePlugin = require('write-file-webpack-plugin');
 const CleanObsoleteChunks = require('webpack-clean-obsolete-chunks');
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 
@@ -40,15 +38,6 @@ let webpackConfig = {
     new CleanWebpackPlugin([
       "./www/*.js",
     ]),
-    
-    new WriteFilePlugin(),
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, './src/assets/img/'),
-        to: path.resolve(__dirname, './www/assets/img'),
-        force: true,
-      },
-    ]), 
   ],
   module: {
     rules: [
@@ -87,26 +76,6 @@ let webpackConfig = {
             },
           },
         ]
-      },
-      {
-        test: /\.(gif|png|jpe?g|svg)$/i,
-        use: [{
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'assets/images'
-          }
-        }]
-      },
-      {
-        test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [{
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'assets/fonts/'
-          }
-        }]
       },
     ]
   },

@@ -110,6 +110,7 @@ export default {
 }
 
 .note-name {
+  height: 36px;
   padding-bottom: 10px;
   margin-right: 20px;
   font-size: 22px;

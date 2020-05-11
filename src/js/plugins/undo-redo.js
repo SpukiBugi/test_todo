@@ -52,7 +52,6 @@ module.exports = {
           this.newMutation = false;
           this.$store.commit(this.empty_state);
           this.done.forEach(mutation => {
-            console.log("done", this.done);
             switch (typeof mutation.payload) {
               case 'object':
                 this.$store.commit(`${mutation.type}`, JSON.parse(JSON.stringify(mutation.payload)));
@@ -62,8 +61,8 @@ module.exports = {
             }
             this.done.pop();
           });
+          
           setTimeout(() => {
-            console.log("done", this.done);
             this.newMutation = true;
           }, 100);
         }

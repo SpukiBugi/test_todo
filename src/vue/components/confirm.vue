@@ -5,7 +5,7 @@
   <dir class="confirm-overlay" @click="$emit('confirm', false)">
     <div class="confirm-box" @click.stop="">
       <slot />
-      <div class="confirm-buttons">
+      <div class="confirm-buttons" v-if="buttons">
         <button class="confirm-button button primary" @click.stop="$emit('confirm', true)">Подтвердить</button>
         <button class="confirm-button button primary" @click.stop="$emit('confirm', false)">Отмена</button>
       </div>
@@ -26,6 +26,14 @@ export default {
   name: 'Confirm',
 
   Svg,
+
+  props: {
+    /** Флаг наличия кнопок в предупреждении */
+    buttons: {
+      type: Boolean,
+      default: true,
+    }
+  },
 }
 </script>
 
@@ -56,6 +64,10 @@ export default {
   padding: 20px;
   background-color: white;
   text-align: center;
+}
+
+.confirm-text {
+  max-width: 100%;
 }
 
 .confirm-buttons {
