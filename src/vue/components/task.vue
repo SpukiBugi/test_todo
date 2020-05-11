@@ -8,7 +8,9 @@
       class="task-check"
       type="checkbox"
       name="check"
-      v-model="new_data.finished"
+      :value="new_data.finished"
+      :checked="new_data.finished"
+      @change="taskChange($event.target.checked, 'finished')"
     >
     <label
       class="task-check-label"
@@ -21,7 +23,7 @@
       </div>
     </label>
 
-    <textarea v-model="new_data.text" class="task-text">
+    <textarea :value="new_data.text" @change="taskChange($event.target.value, 'text')" class="task-text">
     </textarea>
 
     <button 
@@ -51,9 +53,6 @@ export default {
 
   data() {
     return {
-      /** Дебаунс перед обновлением задачи в сторе */
-      task_debounce: this.$debounce(this.changeTask, 1000),
-
       new_data: {
         id: this.task_data.id,
         text: this.task_data.text,
@@ -62,21 +61,16 @@ export default {
     }
   },
 
-  watch: {
-    new_data: {
-      handler(value) {
-        this.task_debounce(value);
-      },
-
-      deep: true,
-    }, 
-  },
-
   methods: {
     ...mapMutations("redactor", [
       "changeTask",
       "deleteTask"
     ]),
+
+    taskChange(value, key) {
+      this.new_data[key] = value;
+      this.changeTask(JSON.parse(JSON.stringify(this.new_data)));
+    }
   },
 }
 </script>

@@ -9,7 +9,9 @@
         ToDoMaker
       </header>
     </router-link>
-    <router-view />
+    <transition name="fade-page" appear>
+      <router-view />
+    </transition>
   </div>
 </template>
 
@@ -27,5 +29,6 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: #f4f4f4;
 }
 </style>

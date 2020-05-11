@@ -1,5 +1,3 @@
-
-
 export default {
   /** Загрузка данных о заметке в стор страницы редактора */
   loadNote: (state, data) => {
@@ -8,6 +6,7 @@ export default {
   },
 
   updateName: (state, name) => {
+    console.log("update_name", name);
     state.note_data.name = name;
   },
 
@@ -22,6 +21,7 @@ export default {
   },
 
   changeTask: (state, changed_task) => {
+    console.log("changeT", changed_task);
     let index;
 
     state.note_data.tasks.find((task, key) => {
@@ -59,6 +59,11 @@ export default {
   /** Очистка стора */
   clearState: (state) => {
     state.note_data = {
+      name: "",
+    
+      tasks: [],
+    };
+    state.start_data = {
       name: "",
     
       tasks: [],

@@ -9,19 +9,24 @@
         <router-link
           to="/note/new"
           class="controls-button" 
-          v-html="$options.Svg.add"
-        ></router-link>
+        >
+          <Tooltip :tool_gap="10">
+            Создать
+          </Tooltip>
+          <div v-html="$options.Svg.add">
+          </div>
+        </router-link>
       </div>
     </div>
     
     <div class="page-content">
-      <div class="notes-container">
+      <transition-group name="fade" tag="div" class="notes-container">
         <Note
           v-for="note in notes" 
           :key="note.id" 
           :note_data="note" 
         />
-      </div>
+      </transition-group>
     </div>
   </main>
 </template>
@@ -32,6 +37,7 @@ import { mapState } from 'vuex';
 import Svg from '@/js/svg.js';
 
 import Note from "@/vue/components/note.vue";
+import Tooltip from "@/vue/components/tooltip.vue";
 
 export default {
   name: 'IndexPage',
@@ -40,6 +46,7 @@ export default {
 
   components: {
     Note,
+    Tooltip,
   },
 
   computed: {

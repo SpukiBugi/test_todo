@@ -85,7 +85,6 @@ export default {
 .note-container {
   position: relative;
   width: 100%;
-  max-width: 350px;
   height: 350px;
   padding: 10px;
   margin: 0 20px 20px 0;
@@ -96,6 +95,11 @@ export default {
 
   &:hover {
     box-shadow: 0 5px 15px rgba(0,0,0,.15);
+  }
+
+  // Medium screens
+  @media only screen and (min-width: 760px) {
+    max-width: 350px;
   }
 }
 
@@ -157,15 +161,5 @@ export default {
 .closer {
   top: 16px;
   right: 10px;
-}
-
-// Medium screens
-@media only screen and (min-width: 641px) {
-}
-// Large screens
-@media only screen and (min-width: 1024px) {
-}
-// XLarge screens
-@media only screen and (min-width: 1441px) {
 }
 </style>

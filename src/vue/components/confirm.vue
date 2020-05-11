@@ -3,7 +3,7 @@
 */
 <template>
   <dir class="confirm-overlay" @click="$emit('confirm', false)">
-    <div class="confirm-box">
+    <div class="confirm-box" @click.stop="">
       <slot />
       <div class="confirm-buttons">
         <button class="confirm-button button primary" @click.stop="$emit('confirm', true)">Подтвердить</button>
@@ -42,6 +42,7 @@ export default {
   margin: 0;
   padding: 0;
   background-color: rgba(128, 128, 128, 0.7);
+  z-index: 11;
 }
 
 .confirm-box {

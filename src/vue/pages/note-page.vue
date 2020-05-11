@@ -6,31 +6,39 @@
     <div class="page-top">
       <h1 class="page-title">Редактор заметки</h1>
       <div class="controls">
-        <button class="controls-button" v-html="$options.Svg.save" @click="saveNote"></button>
-        <button class="controls-button" v-html="$options.Svg.circle_arr" @click="undo"></button>
-        <button class="controls-button reverse" v-html="$options.Svg.circle_arr" @click="redo"></button>
-        <button class="controls-button" v-html="$options.Svg.back" @click="pressCancel"></button>
-        <button class="controls-button" v-html="$options.Svg.cross" @click="pressDelete"></button>
+        <button 
+          v-for="button in $options.buttons" 
+          :key="button.name"
+          class="controls-button"
+          @click="buttonFunc(button.func)"
+        >
+          <Tooltip :tool_gap="10">
+            {{button.name}}
+          </Tooltip>
+          <div v-html="$options.Svg[button.svg_name]">
+          </div>
+        </button>
       </div>
     </div>
     
     <div class="page-content">
       <div class="redactor">
         <p class="name-label">Название заметки</p>
-        <input type="text" v-model="note_name" class="note-name">
+        <input type="text" :value="note.name" @change="inputName" class="note-name">
 
         <p class="name-label">Пункты заметки</p>
 
-        <div class="tasks-container" :key="store_update">
+        <transition-group name="tasks" tag="div" class="tasks-container" :key="store_update">
           <Task 
             v-for="task in note.tasks" 
-            :key="`id-${task.id}_mount-${store_update}`" 
-            :task_data="task" 
+            :key="`id-${task.id}_update-${store_update}`"
+            :task_data="task"
           />
-          <button class="add-task" @click="newTask">
+
+          <button class="add-task" @click="newTask" key="add">
             <div class="add-svg" v-html="$options.Svg.plus"></div>
           </button>
-        </div>
+        </transition-group>
       </div>
     </div>
 
@@ -44,20 +52,55 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex';
+import Vue from "vue";
+import VuexUndoRedo from '@/js/plugins/undo-redo.js';
 
 import Svg from '@/js/svg.js';
 
 import Task from "@/vue/components/task.vue";
 import Confirm from "@/vue/components/confirm.vue";
+import Tooltip from "@/vue/components/tooltip.vue";
+
+Vue.use(VuexUndoRedo, { ignoreMutations: [ "loadNote" ], empty_state: "redactor/emptyState"});
 
 export default {
   name: 'CardPage',
 
   Svg,
 
+  /** Кнопки управления */
+  buttons: [
+    {
+      name: "Сохранить",
+      func: "saveNote",
+      svg_name: "save",
+    },
+    {
+      name: "Отменить",
+      func: "undoAct",
+      svg_name: "undo",
+    },
+    {
+      name: "Вернуть",
+      func: "redoAct",
+      svg_name: "redo",
+    },
+    {
+      name: "Выйти",
+      func: "pressCancel",
+      svg_name: "back",
+    },
+    {
+      name: "Удалить",
+      func: "pressDelete",
+      svg_name: "cross",
+    }
+  ],
+
   components: {
     Task,
     Confirm,
+    Tooltip,
   },
 
   data() {
@@ -73,21 +116,8 @@ export default {
       /** Функция обработки ответа предупреждения */
       confirm_callback: "",
 
-      note_name: "",
-      /** Дебаунс перед обновлением имени в сторе */
-      name_debounce: this.$debounce(this.updateName, 1000),
-
       /** Счетчик обновления стора для перерисовки элементов */
       store_update: 0,
-
-      /** Отписка от слежения за мутациями */
-      unsubscribe: "",
-      /** Флаг того что последней мутацией была отмены действия */
-      just_undid: false,
-      /** Флаг блокировки возврата действия */
-      block_redo: false,
-      /** Флаг возврата действия */
-      redoing: false,
     }
   },
 
@@ -98,27 +128,14 @@ export default {
     }),
   },
 
-  watch: {
-    note_name(value) {
-      this.name_debounce(value);
-    },
-  },
-
   mounted() {
     this.loadData();
-
-    this.unsubscribe = this.$store.subscribe(mutation => {
-      if (this.just_undid && !this.redoing) {
-        this.block_redo = true;
-        this.just_undid = false;
-      }
-    });
   },
 
   beforeDestroy() {
-    this.unsubscribe();
-    this.$store.dispatch("redactor/clear");
     this.clearState();
+    this.done = [];
+    this.undone = [];
   },
 
   methods: {
@@ -136,33 +153,40 @@ export default {
       "clearState",
     ]),
 
-    undo() {
-      this.$store.dispatch("redactor/undo");
-
-      setTimeout(() => {
-        this.block_redo = false;
-        this.just_undid = true;
-        this.note_name = this.note.name;
-        this.store_update++;
-      }, 100);
+    /** Возвращаем функцию для кнопки по названию */
+    buttonFunc(name) {
+      this[name]();
     },
 
-    redo() {
-      if (this.block_redo) {
+    /** Обработка изменения названия */
+    inputName(e) {
+      this.updateName(e.target.value)
+    },
+
+    /** Отмена действия */
+    undoAct() {
+      if (!this.canUndo) {
         return;
       }
 
-      this.redoing = true;     
+      this.undo();
 
       setTimeout(() => {
-        this.$store.dispatch("redactor/redo");
-
-        setTimeout(() => {
-          this.note_name = this.note.name;
-          this.store_update++;
-          this.redoing = false;
-        }, 10)
+        this.store_update++;
       }, 10);
+    },
+
+    /** Возврат действия */
+    redoAct() {
+      if (!this.canRedo) {
+        return;
+      }
+
+      this.redo();
+
+      setTimeout(() => {
+        this.store_update++;
+      }, 10)
     },
 
     /** Получаем данные о заметке из стора */
@@ -175,7 +199,6 @@ export default {
       let store_data = this.notes.find(note => note.id === Number(this.$route.params.id));
       let clone_data = JSON.parse(JSON.stringify(store_data));
       this.loadNote(clone_data);
-      this.note_name = clone_data.name;
 
       setTimeout(() => {
         this.loaded = true;
@@ -247,11 +270,6 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-
-.page-wrapper {
-  background-color: #f4f4f4;
-}
-
 .page-content {
   padding: 0 20px;
   padding-bottom: 20px;
@@ -275,6 +293,10 @@ export default {
   border-radius: $RAD_PRIMARY;
 }
 
+.tasks-container {
+  position: relative;
+}
+
 .add-task {
   display: flex;
   justify-content: center;
@@ -290,6 +312,25 @@ export default {
 .add-svg {
   height: 30px;
   width: 30px;
+}
+
+.tasks-enter-active,
+.tasks-leave-active {
+  transition: opacity .3s ease .2s;
+}
+
+.tasks-leave-active {
+  transition: opacity .3s ease;
+  position: absolute;
+}
+
+.tasks-enter,
+.tasks-leave-to {
+  opacity: 0;
+}
+
+.tasks-move {
+  transition: all .3s ease;
 }
 
 // Medium screens
