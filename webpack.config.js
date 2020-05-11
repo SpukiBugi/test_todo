@@ -11,7 +11,7 @@ let webpackConfig = {
   output: {
     path: path.resolve(__dirname, 'www'),
     filename: '[name].js',
-    publicPath: './',
+    publicPath: '/test_todo/',
   },
 
   resolve: {
@@ -91,6 +91,8 @@ let webpackConfig = {
     port: 8080,
     historyApiFallback: true,
   },
+
+
 };
 
 module.exports = (env, argv) => {
@@ -107,6 +109,8 @@ module.exports = (env, argv) => {
       poll: 3000,
       ignored: ['node_modules', 'www'],
     };
+  } else {
+    webpackConfig.output.publicPath = '/test_todo/';
   }
   
   return webpackConfig;
