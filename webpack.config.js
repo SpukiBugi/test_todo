@@ -11,7 +11,7 @@ let webpackConfig = {
   output: {
     path: path.resolve(__dirname, 'www'),
     filename: '[name].js',
-    publicPath: '/'
+    publicPath: '/test_todo/',
   },
 
   resolve: {
@@ -35,9 +35,9 @@ let webpackConfig = {
         deep: true
       }
     ),
-    // new CleanWebpackPlugin([
-    //   "./www/*.js",
-    // ]),
+    new CleanWebpackPlugin([
+      "./www/*.js",
+    ]),
   ],
   module: {
     rules: [

@@ -6,12 +6,13 @@
   "scripts": {
     "start": "webpack-dev-server --env.development",
     "dist": "npx webpack --config=webpack.config.js --env.production",
-    "dev": "npx webpack --config=webpack.config.js --env.development --progress"
+    "dev": "npx webpack --config=webpack.config.js --env.development --progress",
+    "deploy": "push-dir --dir=www --branch=gh-pages --cleanup"
   },
   "author": "valery",
   "license": "ISC",
   "devDependencies": {
-    
+    "push-dir": "^0.4.1"
   },
   "dependencies": {
     "@babel/core": "^7.4.5",
