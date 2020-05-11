@@ -35,9 +35,9 @@ let webpackConfig = {
         deep: true
       }
     ),
-    new CleanWebpackPlugin([
-      "./www/*.js",
-    ]),
+    // new CleanWebpackPlugin([
+    //   "./www/*.js",
+    // ]),
   ],
   module: {
     rules: [
