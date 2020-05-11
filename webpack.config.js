@@ -11,7 +11,7 @@ let webpackConfig = {
   output: {
     path: path.resolve(__dirname, 'www'),
     filename: '[name].js',
-    publicPath: '/test_todo/',
+    publicPath: '/',
   },
 
   resolve: {
