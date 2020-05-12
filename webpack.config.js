@@ -109,7 +109,7 @@ module.exports = (env, argv) => {
       ignored: ['node_modules', 'www'],
     };
   } else {
-    webpackConfig.output.publicPath = "./";
+    webpackConfig.output.publicPath = "/test_todo/";
   }
   
   return webpackConfig;
