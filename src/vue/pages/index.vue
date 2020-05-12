@@ -54,9 +54,6 @@ export default {
       notes: (state) => state.main.notes,
     }),
   },
-
-  mounted() {
-  },
 }
 </script>
 
@@ -68,15 +65,5 @@ export default {
   flex-wrap: wrap;
   width: 100%;
   padding-left: 20px;
-}
-
-// Medium screens
-@media only screen and (min-width: 641px) {
-}
-// Large screens
-@media only screen and (min-width: 1024px) {
-}
-// XLarge screens
-@media only screen and (min-width: 1441px) {
 }
 </style>

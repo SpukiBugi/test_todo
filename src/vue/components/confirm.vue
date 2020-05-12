@@ -87,14 +87,4 @@ export default {
   top: 16px;
   right: 10px;
 }
-
-// Medium screens
-@media only screen and (min-width: 641px) {
-}
-// Large screens
-@media only screen and (min-width: 1024px) {
-}
-// XLarge screens
-@media only screen and (min-width: 1441px) {
-}
 </style>
