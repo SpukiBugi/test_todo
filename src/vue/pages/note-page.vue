@@ -5,10 +5,13 @@
   <main class="page-wrapper">
     <div class="page-top">
       <h1 class="page-title">Редактор заметки</h1>
-      <div class="controls">
+      <div 
+        class="controls"
+        :class="{'no-del': $route.params.id === 'new'}"
+      >
         <button 
           v-for="button in $options.buttons" 
-          :key="button.name"
+          :key="button.svg_name"
           class="controls-button"
           @click="buttonFunc(button.func)"
         >
