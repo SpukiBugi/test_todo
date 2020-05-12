@@ -109,6 +109,8 @@ module.exports = (env, argv) => {
       poll: 3000,
       ignored: ['node_modules', 'www'],
     };
+  } else {
+    webpackConfig.output.publicPath = "./";
   }
   
   return webpackConfig;
