@@ -70,7 +70,6 @@ let webpackConfig = {
             options: {
               // Provide path to the file with resources
               resources: [
-                path.resolve(__dirname, "src/assets/scss/_colors.scss"),
                 path.resolve(__dirname, "src/assets/scss/_variables.scss"),
               ],
             },
