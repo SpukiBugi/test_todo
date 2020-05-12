@@ -2,7 +2,7 @@
 * Страница заметки
 */
 <template>
-  <main class="page-wrapper" v-if="loaded">
+  <main class="page-wrapper">
     <div class="page-top">
       <h1 class="page-title">Редактор заметки</h1>
       <div class="controls">
@@ -105,9 +105,6 @@ export default {
 
   data() {
     return {
-      /** Флаг загрузки данных из стора */
-      loaded: false,
-
       /** Флаг подтверждения */
       open_confirm: false,
       /** Текст подтверждения */
@@ -171,10 +168,7 @@ export default {
       }
 
       this.undo();
-
-      setTimeout(() => {
-        this.store_update++;
-      }, 10);
+      this.store_update++;
     },
 
     /** Возврат действия */
@@ -184,10 +178,7 @@ export default {
       }
 
       this.redo();
-
-      setTimeout(() => {
-        this.store_update++;
-      }, 10)
+      this.store_update++;
     },
 
     /** Получаем данные о заметке из стора */
@@ -201,9 +192,7 @@ export default {
       let clone_data = JSON.parse(JSON.stringify(store_data));
       this.loadNote(clone_data);
 
-      setTimeout(() => {
-        this.loaded = true;
-      }, 10);
+      this.loaded = true;
     },
 
     /** Сохранение изменений */

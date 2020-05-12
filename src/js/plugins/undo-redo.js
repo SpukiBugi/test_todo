@@ -62,9 +62,7 @@ module.exports = {
             this.done.pop();
           });
           
-          setTimeout(() => {
-            this.newMutation = true;
-          }, 100);
+          this.newMutation = true;
         }
       }
     });
